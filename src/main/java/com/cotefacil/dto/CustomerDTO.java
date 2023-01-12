@@ -1,14 +1,27 @@
 package com.cotefacil.dto;
 
 import com.cotefacil.model.Customer;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
 public class CustomerDTO implements Serializable {
 
     private Integer id;
+
+    @NotBlank(message = "Campo requerido")
+    @Size(min = 3, max = 25, message = "Esse campo deve conter no mínimo 3 e no máximo 25 caracteres")
     private String name;
+
+    @NotBlank(message = "Campo e-mail obrigatório")
     private String email;
+
+    @NotNull(message = "Idade obrigatória")
+//    @Size(min = 1, max = 3, message = "Esse campo deve conter no mínimo 1 e no máximo 3 caracteres")
+    @Positive(message = "Esse campo deve ser um número positivo")
     private Integer age;
 
     public CustomerDTO() {
