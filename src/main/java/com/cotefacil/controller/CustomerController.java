@@ -1,15 +1,16 @@
 package com.cotefacil.controller;
 
 import com.cotefacil.dto.CustomerDTO;
-import com.cotefacil.model.Customer;
 import com.cotefacil.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -19,8 +20,8 @@ public class CustomerController {
     public CustomerService service;
 
     @GetMapping
-    public ResponseEntity<List<CustomerDTO>> findAll() {
-        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<Page<CustomerDTO>> findAll(Pageable pageable) {
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @GetMapping("/{id}")
@@ -29,7 +30,7 @@ public class CustomerController {
     }
 
     @PostMapping("/addCustomer")
-    public ResponseEntity<CustomerDTO> insert(@RequestBody CustomerDTO dto) {
+    public ResponseEntity<CustomerDTO> insert(@Valid @RequestBody CustomerDTO dto) {
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
@@ -37,7 +38,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> update(@RequestBody CustomerDTO dto, @PathVariable Integer id) {
+    public ResponseEntity<CustomerDTO> update(@Valid @RequestBody CustomerDTO dto, @PathVariable Integer id) {
         return ResponseEntity.ok().body(service.update(dto, id));
     }
 
@@ -46,5 +47,4 @@ public class CustomerController {
         service.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
-
 }
